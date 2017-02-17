@@ -89,7 +89,7 @@ public class Robot extends SampleRobot {
 		
 		myRobot.setSafetyEnabled(true);
 		while (isOperatorControl() && isEnabled()) {
-			
+			gyro.reset();
 			System.out.println(gyro.getAngle());
 			//gyro.reset();
 			
@@ -109,19 +109,33 @@ public class Robot extends SampleRobot {
 			//Spin the robot via button 2
 			if(js.getRawButton(2)) {
 				//Don't think we need this, might be causing an issue.
-				//gyro.reset();
+				gyro.reset();
 				double initialPos = gyro.getAngle();
 				double realPos = initialPos;
+				//double rate = gyro.getRate();
 				
 				System.out.println(initialPos + ", " + realPos);
 				
 				double time = 0.0;
 				
 				while(Math.abs(realPos - initialPos) <= 180) {
-					//System.out.println(Math.abs(realPos - initialPos));
+					System.out.println("=====================================================================================");
+					System.out.println("While loop start");
+					System.out.println("=====================================================================================");
+					System.out.println("Current angle:" + initialPos + ", " + realPos);
 					
-					myRobot.drive(-0.4, 1.0);
+					System.out.println(Math.abs(realPos - initialPos));
+					
+					myRobot.drive(-0., 1.0);
 					realPos = gyro.getAngle();
+					
+					//System.out.println(rate);
+					System.out.println("New angle: " + initialPos + ", " + realPos);
+					
+					System.out.println("=====================================================================================");
+					System.out.println("While loop end");
+					System.out.println("=====================================================================================");
+					
 					Timer.delay(0.005);
 				}
 				
