@@ -20,7 +20,7 @@ public class Robot extends SampleRobot {
 	Compressor c = new Compressor(0);
 	DoubleSolenoid ds = new DoubleSolenoid(0, 1);
 	
-	Gyro gyro;
+	private Gyro gyro;
 	static final double Kp = 0.03;
 	
 
@@ -127,7 +127,7 @@ public class Robot extends SampleRobot {
 					System.out.println(Math.abs(realPos - initialPos));
 					
 					myRobot.drive(-0., 1.0);
-					realPos = gyro.getAngle();
+					realPos = gyro.getAngle(); //get the current heading
 					
 					//System.out.println(rate);
 					System.out.println("New angle: " + initialPos + ", " + realPos);
@@ -143,6 +143,15 @@ public class Robot extends SampleRobot {
 				
 			}
 			
+			//Spin the robot via button 5
+			if(js.getRawButton(5)) {
+				double testKp = 0.04;
+				//Don't think we need this, might be causing an issue.
+				gyro.reset();
+				double angle = gyro.getAngle(); // get current heading
+	            myRobot.drive(-1.0, -angle*testKp); // drive towards heading 0
+	            Timer.delay(0.004);
+			}
 			/*if(js.getRawButton(5)) {
 				c.start();
 			}
@@ -150,6 +159,7 @@ public class Robot extends SampleRobot {
 			if(js.getRawButton(6)) {
 				c.stop();
 			}*/
+			myRobot.drive(0.0, 0.0);
 		}
 	}
 }
