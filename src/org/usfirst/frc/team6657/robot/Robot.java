@@ -116,12 +116,12 @@ public class Robot extends SampleRobot {
 				
 				System.out.println(initialPos + ", " + realPos);
 				
-				double time = 0.0;
+				//double time = 0.0;
 				
 				while(Math.abs(realPos - initialPos) <= 180) {
-					System.out.println("=====================================================================================");
+					System.out.println("====================================");
 					System.out.println("While loop start");
-					System.out.println("=====================================================================================");
+					
 					System.out.println("Current angle:" + initialPos + ", " + realPos);
 					
 					System.out.println(Math.abs(realPos - initialPos));
@@ -132,9 +132,8 @@ public class Robot extends SampleRobot {
 					//System.out.println(rate);
 					System.out.println("New angle: " + initialPos + ", " + realPos);
 					
-					System.out.println("=====================================================================================");
 					System.out.println("While loop end");
-					System.out.println("=====================================================================================");
+					System.out.println("====================================");
 					
 					Timer.delay(0.005);
 				}
