@@ -73,8 +73,13 @@ public class Robot extends SampleRobot {
 
 	@Override
 	public void operatorControl() {
+		gyro.reset();
+		
 		myRobot.setSafetyEnabled(true);
 		while (isOperatorControl() && isEnabled()) {
+			
+			System.out.println(gyro.getAngle());
+			gyro.reset();
 			
 			myRobot.arcadeDrive(js, js.getAxisChannel(AxisType.kY), js, js.getAxisChannel(AxisType.kTwist));
 			
@@ -89,10 +94,26 @@ public class Robot extends SampleRobot {
 				ds.set(DoubleSolenoid.Value.kReverse);
 			}
 			
-			if(js.getRawButton(2)) {
-				myRobot.drive(-0.1, 1.0);
-				Timer.delay(2);
-			}
+			/*if(js.getRawButton(2)) {
+				gyro.reset();
+				double initialPos = gyro.getAngle();
+				double realPos = initialPos;
+				
+				System.out.println(initialPos + ", " + realPos);
+				
+				double time = 0.0;
+				
+				while(Math.abs(realPos - initialPos) <= 180) {
+					//System.out.println(Math.abs(realPos - initialPos));
+					
+					myRobot.drive(-0.4, 1.0);
+					realPos = gyro.getAngle();
+					Timer.delay(0.005);
+				}
+				
+				time = 0;
+				
+			}*/
 			
 			/*if(js.getRawButton(5)) {
 				c.start();
