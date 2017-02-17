@@ -46,6 +46,8 @@ public class Robot extends SampleRobot {
 		
 		c.setClosedLoopControl(true);
 		
+		gyro.calibrate();
+		
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
@@ -74,12 +76,13 @@ public class Robot extends SampleRobot {
 	@Override
 	public void operatorControl() {
 		gyro.reset();
+		gyro.calibrate();
 		
 		myRobot.setSafetyEnabled(true);
 		while (isOperatorControl() && isEnabled()) {
 			
 			System.out.println(gyro.getAngle());
-			gyro.reset();
+			//gyro.reset();
 			
 			myRobot.arcadeDrive(js, js.getAxisChannel(AxisType.kY), js, js.getAxisChannel(AxisType.kTwist));
 			
