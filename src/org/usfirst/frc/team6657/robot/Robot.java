@@ -46,6 +46,7 @@ public class Robot extends SampleRobot {
 		
 		c.setClosedLoopControl(true);
 		
+		//Calibrate the gyro with a few samples.
 		gyro.calibrate();
 		
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -57,7 +58,11 @@ public class Robot extends SampleRobot {
 	
 	@Override
     public void autonomous() {
-		gyro.reset();
+		//Calibrate the gyro
+		gyro.calibrate();
+		
+		//Many not need to reset at this point since we just calibrated it.
+		//gyro.reset();
 		
     	while (isAutonomous() && isEnabled()) {
     		double angle = gyro.getAngle();
@@ -66,6 +71,9 @@ public class Robot extends SampleRobot {
 
     		Timer.delay(0.01);
     	}
+    	
+    	//Free up the gyro once we are done with it.
+    	gyro.free();
     }
 	
 	@Override
@@ -73,6 +81,7 @@ public class Robot extends SampleRobot {
 		ds.set(DoubleSolenoid.Value.kOff);
 	}
 
+	//Controller (joy stick) logic
 	@Override
 	public void operatorControl() {
 		gyro.reset();
@@ -97,8 +106,10 @@ public class Robot extends SampleRobot {
 				ds.set(DoubleSolenoid.Value.kReverse);
 			}
 			
-			/*if(js.getRawButton(2)) {
-				gyro.reset();
+			//Spin the robot via button 2
+			if(js.getRawButton(2)) {
+				//Don't think we need this, might be causing an issue.
+				//gyro.reset();
 				double initialPos = gyro.getAngle();
 				double realPos = initialPos;
 				
@@ -116,7 +127,7 @@ public class Robot extends SampleRobot {
 				
 				time = 0;
 				
-			}*/
+			}
 			
 			/*if(js.getRawButton(5)) {
 				c.start();
