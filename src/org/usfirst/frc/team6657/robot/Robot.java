@@ -21,9 +21,6 @@ public class Robot extends SampleRobot {
 												// operations
 	Joystick js = new Joystick(0); // set to ID 1 in DriverStation
 	
-	Compressor c = new Compressor(0);
-	DoubleSolenoid ds = new DoubleSolenoid(0, 1);
-	
 	private Gyro gyro;
 	static final double Kp = 0.03;
 	
@@ -34,21 +31,9 @@ public class Robot extends SampleRobot {
 		gyro = new AnalogGyro(1);
 	}
 	
-	DoubleSolenoid.Value getOpposite(DoubleSolenoid.Value v) {
-		if(v == DoubleSolenoid.Value.kForward) {
-			return DoubleSolenoid.Value.kReverse;
-		}else if(v == DoubleSolenoid.Value.kReverse) {
-			return DoubleSolenoid.Value.kForward;
-		}
-		
-		return DoubleSolenoid.Value.kOff;
-	}
-	
 	@Override
 	public void robotInit() {
 		CameraServer.getInstance().startAutomaticCapture();
-		
-		c.setClosedLoopControl(true);
 		
 		//Calibrate the gyro with a few samples.
 		gyro.calibrate();
@@ -61,6 +46,14 @@ public class Robot extends SampleRobot {
 		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 	}
 	
+	/*
+	 * 0.5: 2.5 ft/s
+	 * 0.6: 3.25 ft/s
+	 * 0.7: 4 ft/s
+	 * 0.8: 4.6 ft/s
+	 * 0.9: 5.25 ft/s
+	 * 1.0: Pretty much a 90 degree turn
+	 */
 	
 	@Override
     public void autonomous() {
@@ -70,7 +63,7 @@ public class Robot extends SampleRobot {
 		//Many not need to reset at this point since we just calibrated it.
 		//gyro.reset();
 		
-		autoPath(3); // Indicates which path to take
+		autoPath(10); // Indicates which path to take
 		
     	/*while (isAutonomous() && isEnabled()) {
     		double angle = gyro.getAngle();
@@ -109,8 +102,42 @@ public class Robot extends SampleRobot {
 			case 3: {
 				if(acc <= 1.0) myRobot.drive(-0.4, -angle*Kp);
 				if(acc > 1.0 && acc <= 2.0) myRobot.drive(-0.4, 0.0);
-				else myRobot.drive(0.0, 0.0);
+				else if(acc > 2.0) myRobot.drive(0.0, 0.0);
 				break;
+			}
+			case 4: {
+				if(acc <= 1.0) myRobot.drive(-0.5, -angle*Kp);
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 5: {
+				 //myRobot.drive(-0.6, -angle*Kp);
+				 if(acc <= 1.0) myRobot.drive(-0.4, 1/Math.pow(Math.E, (48/28)));
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 6: {
+				if(acc <= 1.0) myRobot.drive(-0.7, -angle*Kp);
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 7: {
+				if(acc <= 1.0) myRobot.drive(-0.8, -angle*Kp);
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 8: {
+				if(acc <= 1.0) myRobot.drive(-0.9, -angle*Kp);
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 9: {
+				if(acc <= 1.0) myRobot.drive(-1.0, -angle*Kp);
+				else if(acc > 1.0) myRobot.drive(0.0, 0.0);
+				break;
+			}
+			case 10: {
+				if(acc <= 0.5) myRobot.drive(-0.8, -angle*1.5);
 			}
 			}
 			
@@ -121,18 +148,18 @@ public class Robot extends SampleRobot {
 	
 	@Override
 	public void disabled() {
-		ds.set(DoubleSolenoid.Value.kOff);
+		//gyro.free();
 	}
 
 	//Controller (joy stick) logic
 	@Override
 	public void operatorControl() {
-		gyro.reset();
-		gyro.calibrate();
+		//gyro.reset();
+		//gyro.calibrate();
 		
 		myRobot.setSafetyEnabled(true);
 		while (isOperatorControl() && isEnabled()) {
-			gyro.reset();
+			//gyro.reset();
 			System.out.println(gyro.getAngle());
 			//gyro.reset();
 			
@@ -140,14 +167,6 @@ public class Robot extends SampleRobot {
 			
 			//myRobot.arcadeDrive(js);
 			Timer.delay(0.005); // wait for a motor update time
-			
-			if(js.getRawButton(3)) {
-				ds.set(DoubleSolenoid.Value.kForward);
-			}
-			
-			if(js.getRawButton(4)) {
-				ds.set(DoubleSolenoid.Value.kReverse);
-			}
 			
 			//Spin the robot via button 2
 			if(js.getRawButton(2)) {
