@@ -53,10 +53,12 @@ public class Robot extends SampleRobot {
 		//Calibrate the gyro with a few samples.
 		gyro.calibrate();
 		
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-		myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-		//myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-		//myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+		box.setInverted(true);
+		
+		//myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+		//myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+		myRobot.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 	}
 	
 	
@@ -105,17 +107,8 @@ public class Robot extends SampleRobot {
 				break;
 			}
 			case 3: {
-				if(acc <= 1.0) myRobot.drive(-0.9, -angle*Kp);
-					//{
-						/*if(acc <= 0.1)
-						{
-							myRobot.drive(-0.4, 0.0);
-						}
-						else
-						{
-							myRobot.drive(-0.9, -angle*Kp);
-						}
-					}*/
+				if(acc <= 1.0) myRobot.drive(-0.4, -angle*Kp);
+				if(acc > 1.0 && acc <= 2.0) myRobot.drive(-0.4, 0.0);
 				else myRobot.drive(0.0, 0.0);
 				break;
 			}
@@ -159,36 +152,38 @@ public class Robot extends SampleRobot {
 			//Spin the robot via button 2
 			if(js.getRawButton(2)) {
 				//Don't think we need this, might be causing an issue.
-				gyro.reset();
+				//gyro.reset();
 				double initialPos = gyro.getAngle();
 				double realPos = initialPos;
 				//double rate = gyro.getRate();
 				
-				System.out.println(initialPos + ", " + realPos);
+				System.out.println("Begin: " + initialPos + ", " + realPos);
 				
 				//double time = 0.0;
 				
 				while(Math.abs(realPos - initialPos) <= 180) {
-					System.out.println("====================================");
-					System.out.println("While loop start");
+					//System.out.println("====================================");
+					//System.out.println("While loop start");
 					
-					System.out.println("Current angle:" + initialPos + ", " + realPos);
+					//System.out.println("Current angle:" + initialPos + ", " + realPos);
 					
-					System.out.println(Math.abs(realPos - initialPos));
+					//System.out.println(Math.abs(realPos - initialPos));
 					
 					myRobot.drive(-0.4, 1.0);
 					realPos = gyro.getAngle(); //get the current heading
 					
 					//System.out.println(rate);
-					System.out.println("New angle: " + initialPos + ", " + realPos);
+					//System.out.println("New angle: " + initialPos + ", " + realPos);
 					
-					System.out.println("While loop end");
-					System.out.println("====================================");
+					//System.out.println("While loop end");
+					//System.out.println("====================================");
 					if(js.getRawButton(7)) {
 						break;
 					}
 					Timer.delay(0.005);
 				}
+				
+				System.out.println("End" + initialPos + ", " + realPos);
 				
 				//time = 0;
 				
@@ -205,7 +200,13 @@ public class Robot extends SampleRobot {
 			}
 			
 			if(js.getRawButton(9)) {
-				box.set(0.4);
+				box.setSpeed(-0.4);
+				box.set(-0.4);
+			}
+			
+			if(js.getRawButton(10)) {
+				box.setSpeed(0.0);
+				box.set(0.0);
 			}
 			
 		}
