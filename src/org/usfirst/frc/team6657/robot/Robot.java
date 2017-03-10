@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6657.robot;
 
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -17,7 +18,7 @@ public class Robot extends SampleRobot {
 	//RobotDrive myRobot = new RobotDrive(0, 2, 1, 3); // class that handles basic drive
 	RobotDrive myRobot = new RobotDrive(0, 1);
 	
-	Jaguar box = new Jaguar(2);
+	Spark box = new Spark(3);
 												// operations
 	Joystick js = new Joystick(0); // set to ID 1 in DriverStation
 	
@@ -38,7 +39,7 @@ public class Robot extends SampleRobot {
 		//Calibrate the gyro with a few samples.
 		gyro.calibrate();
 		
-		box.setInverted(true);
+		//box.setInverted(true);
 		
 		//myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 		//myRobot.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
@@ -63,7 +64,7 @@ public class Robot extends SampleRobot {
 		//Many not need to reset at this point since we just calibrated it.
 		//gyro.reset();
 		
-		autoPath(10); // Indicates which path to take
+		//autoPath(10); // Indicates which path to take
 		
     	/*while (isAutonomous() && isEnabled()) {
     		double angle = gyro.getAngle();
@@ -169,7 +170,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.005); // wait for a motor update time
 			
 			//Spin the robot via button 2
-			if(js.getRawButton(2)) {
+			/*if(js.getRawButton(2)) {
 				//Don't think we need this, might be causing an issue.
 				//gyro.reset();
 				double initialPos = gyro.getAngle();
@@ -206,24 +207,17 @@ public class Robot extends SampleRobot {
 				
 				//time = 0;
 				
+			}*/
+			
+			if(js.getRawButton(3)) {
+				box.setSpeed(-1);
 			}
 			
-			//Spin the robot via button 5
-			if(js.getRawButton(5)) {
-				double testKp = 0.04;
-				//Don't think we need this, might be causing an issue.
-				gyro.reset();
-				double angle = gyro.getAngle(); // get current heading
-	            myRobot.drive(-0.4, -angle*testKp); // drive towards heading 0
-	            Timer.delay(0.005);
+			if(js.getRawButton(4)) {
+				box.setSpeed(1);
 			}
 			
-			if(js.getRawButton(9)) {
-				box.setSpeed(-0.4);
-				box.set(-0.4);
-			}
-			
-			if(js.getRawButton(10)) {
+			if(js.getRawButton(2)) {
 				box.setSpeed(0.0);
 				box.set(0.0);
 			}
